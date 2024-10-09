@@ -1,12 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+const env = require("dotenv").config();
 export default defineNuxtConfig({
-  mode: "static",
-  router: {
-    base: "Nuxt-Vue-News",
-  },
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
   modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt", "@nuxt/eslint"],
+  runtimeConfig: {
+    public: {
+      apiKey: process.env.API_KEY,
+    },
+  },
   imports: {
     presets: [
       {
@@ -24,5 +26,7 @@ export default defineNuxtConfig({
     head: {
       title: "World news",
     },
+    // baseURL: "/Nuxt-Vue-News/",
+    // buildAssetsDir: 'assets'
   },
 });

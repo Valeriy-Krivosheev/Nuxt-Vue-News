@@ -19,6 +19,6 @@ import { useNewsStore } from "~/store";
 
 const newsList = ref<news[]>([]);
 const { fetchNews } = useNewsStore();
-const { data, status, error } = await fetchNews();
+const { data } = await fetchNews();
 newsList.value = data.value.articles;
 </script>
