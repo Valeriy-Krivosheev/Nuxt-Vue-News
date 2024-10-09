@@ -4,7 +4,7 @@
   >
     <img
       class="rounded-t-lg w-full h-[240px] object-cover text-center"
-      :src="item.urlToImage ?? require('~/public/no-image.png')"
+      :src="item.urlToImage || '/no-image.png'"
       alt="Image was removed by copyright holder"
     />
     <div class="p-5 flex flex-1 flex-col">
