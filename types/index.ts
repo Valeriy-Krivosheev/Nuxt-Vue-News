@@ -9,7 +9,7 @@ export interface newsItem {
   url: URL;
   urlToImage: URL;
 }
-export type news = {
+export type newsData = {
   status: string;
   totalResults: number;
   articles: newsItem[];

@@ -25,6 +25,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: "World news",
+      link: [{ rel: "icon", type: "image/png", href: "/favicon.png" }],
     },
     // baseURL: "/Nuxt-Vue-News/",
     // buildAssetsDir: 'assets'

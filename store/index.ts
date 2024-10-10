@@ -1,13 +1,16 @@
 import { defineStore } from "pinia";
+import type { newsData, newsItem } from "~/types";
 
 export const useNewsStore = defineStore("newsStore", () => {
   const API_KEY = useRuntimeConfig().public.apiKey;
+  const newsList = ref<newsItem[]>([]);
   const fetchNews = async () => {
-    return useFetch(
+    const { data } = await useFetch<newsData>(
       `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`,
     );
+    newsList.value = data.value!.articles;
   };
-  return { fetchNews };
+  return { fetchNews, newsList };
 });
 
 if (import.meta.hot) {
