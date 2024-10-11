@@ -5,12 +5,16 @@ export const useNewsStore = defineStore("newsStore", () => {
   const API_KEY = useRuntimeConfig().public.apiKey;
   const newsList = ref<newsItem[]>([]);
   const fetchNews = async () => {
-    const { data } = await useFetch<newsData>(
+    // const { data, pending } = await useFetch<newsData>(
+    //   `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`,
+    //   { lazy: true },
+    // );
+    // newsList.value = data.value!.articles;
+    return await $fetch(
       `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`,
     );
-    newsList.value = data.value!.articles;
   };
-  return { fetchNews, newsList };
+  return { fetchNews };
 });
 
 if (import.meta.hot) {
