@@ -4,8 +4,9 @@
   >
     <img
       class="rounded-t-lg w-full h-[240px] object-cover text-center"
-      :src="item.urlToImage || '/no-image.png'"
+      :src="imageUrl"
       alt="Image was removed by copyright holder"
+      @error="onImageError"
     />
     <div class="p-5 flex flex-1 flex-col">
       <h5
@@ -45,7 +46,12 @@
 </template>
 <script lang="ts" setup>
 import type { newsItem } from "~/types";
-defineProps<{
+const props = defineProps<{
   item: newsItem;
 }>();
+
+const imageUrl = ref(props.item.urlToImage || "/no-image.png");
+const onImageError = () => {
+  imageUrl.value = "/no-image.png";
+};
 </script>
