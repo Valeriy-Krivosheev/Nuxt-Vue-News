@@ -1,3 +1,5 @@
+import { watch, type Ref } from "vue";
+import type { newsItem, newsData } from "~/types";
 export function usePageScroll(threshold: number = 200) {
   const isNearBottom = ref(false);
 
@@ -5,7 +7,6 @@ export function usePageScroll(threshold: number = 200) {
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
     const scrollPosition = window.scrollY + windowHeight;
-
     isNearBottom.value = documentHeight - scrollPosition <= threshold;
   };
 
@@ -38,3 +39,26 @@ export function usePageScroll(threshold: number = 200) {
     isNearBottom,
   };
 }
+
+export const useScrollObserver = (
+  isNearBottom: Ref<boolean>,
+  totalResults: number | undefined = 1,
+  loadedNews: newsItem[],
+  scrollRequest: () => void,
+  isNeedLoading: (
+    totalResults: number | undefined,
+    articlesCount: number,
+  ) => boolean,
+) => {
+  watch(
+    () => isNearBottom.value,
+    () => {
+      if (
+        isNearBottom.value &&
+        isNeedLoading(totalResults, loadedNews.length)
+      ) {
+        scrollRequest();
+      }
+    },
+  );
+};

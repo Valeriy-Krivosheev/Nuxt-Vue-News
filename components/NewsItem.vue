@@ -5,7 +5,6 @@
     <img
       class="rounded-t-lg w-full h-[240px] object-cover text-center"
       :src="imageUrl"
-      alt="Image was removed by copyright holder"
       @error="onImageError"
     />
     <div class="p-5 flex flex-1 flex-col">

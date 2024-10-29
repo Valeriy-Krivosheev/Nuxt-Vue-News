@@ -5,6 +5,7 @@
     >
       Today's breaking news
     </h1>
+
     <div class="p-4 grid grid-cols-4 gap-6 mb-10" v-if="status === 'pending'">
       <loading-skeleton v-for="item in 10" :key="item" />
     </div>
@@ -12,8 +13,9 @@
       v-else-if="status === 'success'"
       class="p-4 grid grid-cols-4 gap-6 mb-10"
     >
-      <news-item v-for="(item, i) in articles" :key="i" :item="item" />
+      <news-item v-for="(item, i) in filteredArticles" :key="i" :item="item" />
     </list-item>
+    <loading-indicator v-if="isLoading" />
   </div>
 </template>
 
@@ -21,30 +23,42 @@
 import type { newsItem, newsData } from "~/types";
 import { useNewsStore } from "~/store";
 import { usePageScroll } from "~/composables/usePageScroll";
+import { isNeedLoading } from "~/composables/useCommon";
+import { useScrollObserver } from "~/composables/usePageScroll";
 
 const newsStore = useNewsStore();
-const page = ref(1);
-const { data: newsList, status } = await useAsyncData<newsData>(() =>
-  newsStore.fetchNews(),
+
+const { data: newsList, status } = await useAsyncData(
+  "breaking-news",
+  (): Promise<newsData> => newsStore.fetchNews(),
 );
 const { articles } = newsList.value;
 const { isNearBottom } = usePageScroll();
 
+const isLoading = ref(false);
+const page = ref(1);
+
+const filteredArticles = computed(() =>
+  articles.filter((item) => item.title !== "[Removed]"),
+);
+
 const scrollRequest = async () => {
-  const { data } = await useAsyncData<newsData>(() =>
-    newsStore.fetchNews("top-headlines", "", 16, ++page.value),
+  isLoading.value = true;
+  const data = await newsStore.fetchNews<Promise<newsData>>(
+    "top-headlines",
+    "",
+    16,
+    ++page.value,
   );
-  data.value.articles.forEach((item) => {
-    articles.push(item);
-  });
+  articles.push(...data.articles);
+  isLoading.value = false;
 };
 
-watch(
-  () => isNearBottom.value,
-  () => {
-    if (isNearBottom.value) {
-      scrollRequest();
-    }
-  },
+useScrollObserver(
+  isNearBottom,
+  newsList.value?.totalResults,
+  articles,
+  scrollRequest,
+  isNeedLoading,
 );
 </script>

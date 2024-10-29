@@ -3,7 +3,7 @@
     <h1
       class="text-5xl font-bold text-gray-800 px-4 py-6 dark:text-white text-center"
     >
-      Today's business news
+      General general
     </h1>
     <div class="p-4 grid grid-cols-4 gap-6 mb-10" v-if="status === 'pending'">
       <loading-skeleton v-for="item in 10" :key="item" />
@@ -25,8 +25,8 @@ import { usePageScroll, useScrollObserver } from "~/composables/usePageScroll";
 import { isNeedLoading } from "~/composables/useCommon";
 const newsStore = useNewsStore();
 const { data: newsList, status } = await useAsyncData<newsData>(
-  "business-news",
-  () => newsStore.fetchNews("top-headlines", "business"),
+  "general-news",
+  () => newsStore.fetchNews("top-headlines", "general"),
 );
 const { articles } = newsList.value;
 const { isNearBottom } = usePageScroll();
@@ -41,7 +41,7 @@ const scrollRequest = async () => {
   isLoading.value = true;
   const data = await newsStore.fetchNews<Promise<newsData>>(
     "top-headlines",
-    "business",
+    "general",
     16,
     ++page.value,
   );

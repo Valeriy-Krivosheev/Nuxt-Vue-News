@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import type { newsData } from "~/types";
 
 export const useNewsStore = defineStore("newsStore", () => {
   const API_KEY = useRuntimeConfig().public.apiKey;
@@ -8,7 +9,7 @@ export const useNewsStore = defineStore("newsStore", () => {
     pageSize: number = 16,
     page = 1,
   ) => {
-    return await $fetch(
+    const data: newsData = await $fetch(
       `https://newsapi.org/v2/${value}?country=us&apiKey=${API_KEY}`,
       {
         params: {
@@ -18,6 +19,7 @@ export const useNewsStore = defineStore("newsStore", () => {
         },
       },
     );
+    return data;
   };
   return { fetchNews };
 });
